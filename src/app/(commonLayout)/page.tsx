@@ -1,3 +1,5 @@
+import BestArraivals from '@/app/components/home/BestArraivals';
+import DealOfTheDay from '@/app/components/home/DealOfTheDay';
 import Hero from '@/app/components/home/Hero';
 import NewArraivals from '@/app/components/home/NewArraivals';
 
@@ -6,6 +8,8 @@ export default function Page() {
     <div className="flex w-full flex-col">
       <Hero />
       <NewArraivals />
+      <BestArraivals />
+      <DealOfTheDay />
     </div>
   );
 }
