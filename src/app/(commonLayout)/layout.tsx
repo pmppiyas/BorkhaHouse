@@ -1,5 +1,6 @@
-import Navbar from "@/app/components/shared/Navbar"
-import React from "react"
+import Hero from '@/app/components/home/Hero';
+import Navbar from '@/app/components/shared/Navbar';
+import React from 'react';
 
 const layout = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -7,7 +8,7 @@ const layout = ({ children }: { children: React.ReactNode }) => {
       <Navbar />
       {children}
     </div>
-  )
-}
+  );
+};
 
-export default layout
+export default layout;
