@@ -25,7 +25,7 @@ export default function ProductCard({ product }: { product: Product }) {
     <div
       className={cn(
         'group flex h-full w-full cursor-pointer flex-col overflow-hidden rounded-2xl border bg-card p-3 transition-all duration-300 hover:border-primary/50 hover:shadow-md',
-        product.isBig ? 'min-h-[400px]' : 'min-h-[320px]'
+        product.isBig ? 'min-h-100' : 'min-h-80'
       )}
     >
       {/* IMAGE CONTAINER */}

@@ -1,8 +1,20 @@
+import {
+  Home,
+  Layers,
+  Gem,
+  Sparkles,
+  Sticker,
+  Baby,
+  Info,
+  PhoneCall,
+} from 'lucide-react';
+
 export const navItems = [
-  { name: 'Home', href: '/' },
+  { name: 'Home', href: '/', icon: Home },
   {
     name: 'Three Pes',
     href: '/three-pes',
+    icon: Layers,
     children: [
       { name: 'Item 1', href: '/three-pes/item1' },
       { name: 'Item 2', href: '/three-pes/item2' },
@@ -11,6 +23,7 @@ export const navItems = [
   {
     name: 'Dubai Borka',
     href: '/dubai-borka',
+    icon: Gem,
     children: [
       { name: 'Classic', href: '/dubai-borka/classic' },
       { name: 'Premium', href: '/dubai-borka/premium' },
@@ -19,6 +32,7 @@ export const navItems = [
   {
     name: 'Abaya',
     href: '/abaya',
+    icon: Sparkles,
     children: [
       { name: 'Black Abaya', href: '/abaya/black' },
       { name: 'Open Abaya', href: '/abaya/open' },
@@ -27,14 +41,15 @@ export const navItems = [
   {
     name: 'Hijab',
     href: '/hijab',
+    icon: Sticker,
     children: [
       { name: 'Cotton', href: '/hijab/cotton' },
       { name: 'Silk', href: '/hijab/silk' },
     ],
   },
-  { name: 'Baby Borka', href: '/baby-borka' },
-  { name: 'About Us', href: '/about' },
-  { name: 'Contact', href: '/contact' },
+  { name: 'Baby Borka', href: '/baby-borka', icon: Baby },
+  { name: 'About Us', href: '/about', icon: Info },
+  { name: 'Contact', href: '/contact', icon: PhoneCall },
 ];
 
 export const categories = navItems
@@ -42,5 +57,6 @@ export const categories = navItems
   .map((item) => ({
     name: item.name,
     href: item.href,
+    icon: item.icon,
     children: item.children,
   }));
