@@ -1,8 +1,8 @@
-import React from "react"
+import React from 'react';
 
 const Logo = () => {
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex w-max flex-col items-center">
       <h1 className="text-2xl font-bold tracking-tight text-primary">
         Star Style
       </h1>
@@ -10,7 +10,7 @@ const Logo = () => {
         Dress with Dignity
       </p>
     </div>
-  )
-}
+  );
+};
 
-export default Logo
+export default Logo;
