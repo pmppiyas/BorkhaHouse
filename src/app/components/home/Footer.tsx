@@ -106,7 +106,7 @@ function Footer() {
             Store Information
           </h3>
 
-          <ul className="space-y-2 text-xs">
+          <ul className="space-y-2">
             <li>Star Style</li>
             <li>570 - Union Trade Center</li>
             <li>+001 476 814</li>
