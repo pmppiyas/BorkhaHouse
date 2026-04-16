@@ -3,10 +3,11 @@
 import Image from 'next/image';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils'; // Tailwind ক্লাস ম্যানেজ করার জন্য Shadcn এর ইউটিলিতি
+import { cn } from '@/lib/utils';
+import { IProduct } from '@/interface/product.interface';
 
 type Product = {
-  title: string;
+  name: string;
   brand: string;
   price: string;
   oldPrice?: string;
@@ -17,9 +18,8 @@ type Product = {
   isBig?: boolean;
 };
 
-export default function ProductCard({ product }: { product: Product }) {
-  const [index, setIndex] = useState(0);
-  const images = product.images || [];
+export default function ProductCard({ product }: { product: IProduct }) {
+  const thumbnail = product?.thumbnail?.trim() || null;
 
   return (
     <div
@@ -36,10 +36,10 @@ export default function ProductCard({ product }: { product: Product }) {
         )}
       >
         {/* IMAGE SLIDER */}
-        {images.length > 0 ? (
+        {thumbnail ? (
           <Image
-            src={images[index]}
-            alt={product.title}
+            src={thumbnail}
+            alt={product?.name || 'Product Image'}
             fill
             className="object-cover transition duration-500 group-hover:scale-110"
           />
@@ -50,7 +50,7 @@ export default function ProductCard({ product }: { product: Product }) {
         )}
 
         {/* GRADIENT OVERLAY */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+        <div className="absolute inset-0 bg-linear-to-t from-black/40 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
 
         {/* BADGES */}
         <div className="absolute top-2 left-2 flex flex-col space-y-1 text-[10px] font-bold">
@@ -59,11 +59,11 @@ export default function ProductCard({ product }: { product: Product }) {
               {product.discount}
             </span>
           )}
-          {product.isNew && (
+          {/* {product.isNew && (
             <span className="rounded-md bg-primary px-2 py-0.5 text-primary-foreground shadow-sm">
               New
             </span>
-          )}
+          )} */}
         </div>
 
         {/* ADD TO CART (HOVER) */}
@@ -72,22 +72,6 @@ export default function ProductCard({ product }: { product: Product }) {
             Add to Cart
           </Button>
         </div>
-
-        {/* THUMB SLIDER (Dots) */}
-        {images.length > 1 && (
-          <div className="absolute bottom-2 left-1/2 flex -translate-x-1/2 gap-1.5">
-            {images.map((_, i) => (
-              <span
-                key={i}
-                onMouseEnter={() => setIndex(i)}
-                className={cn(
-                  'h-1.5 w-1.5 cursor-pointer rounded-full transition-all',
-                  index === i ? 'w-4 bg-primary' : 'bg-white/60'
-                )}
-              />
-            ))}
-          </div>
-        )}
       </div>
 
       {/* CONTENT */}
@@ -108,25 +92,25 @@ export default function ProductCard({ product }: { product: Product }) {
             product.isBig ? 'text-lg' : 'text-sm'
           )}
         >
-          {product.title}
+          {product.name}
         </h3>
 
         {/* ⭐ Rating */}
-        <div className="flex items-center gap-1 text-xs text-yellow-500">
+        {/* <div className="flex items-center gap-1 text-xs text-yellow-500">
           <span>★★★★★</span>
           <span className="text-[10px] font-medium text-muted-foreground">
             ({product.reviews})
           </span>
-        </div>
+        </div> */}
 
         {/* PRICE */}
         <div className="mt-1 flex items-center gap-2">
           <span className="text-base font-bold text-primary">
             {product.price}
           </span>
-          {product.oldPrice && (
+          {product.price && (
             <span className="text-xs text-muted-foreground line-through opacity-70">
-              {product.oldPrice}
+              {product.price}
             </span>
           )}
         </div>

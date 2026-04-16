@@ -1,8 +1,8 @@
-import { products } from '@/app/assets/product.assets';
 import Header from '@/app/components/shared/Header';
 import ProductCard from '@/app/components/shared/ProductCard';
+import { IProduct } from '@/interface/product.interface';
 
-function BestArraivals() {
+function BestSellers({ products }: { products: IProduct[] }) {
   return (
     <div className="space-y-4 p-4 md:p-6">
       <Header title="Best Sellers" />
@@ -15,4 +15,4 @@ function BestArraivals() {
   );
 }
 
-export default BestArraivals;
+export default BestSellers;

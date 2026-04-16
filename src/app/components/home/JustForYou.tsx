@@ -8,8 +8,9 @@ import { products } from '@/app/assets/product.assets';
 import { categories } from '@/app/assets/nav.assets';
 import { LayoutGrid, ChevronDown, ChevronRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { IProduct } from '@/interface/product.interface';
 
-const JustForYou = () => {
+const JustForYou = ({ products }: { products: IProduct[] }) => {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   const toggleAccordion = (index: number) => {
@@ -17,11 +18,10 @@ const JustForYou = () => {
   };
 
   return (
-    <div className="mx-auto max-w-7xl space-y-4 p-4 md:p-6">
+    <div className="space-y-4 p-4 md:p-6">
       <Header title="Just For you" />
 
       <div className="flex flex-col gap-6 md:flex-row">
-        {/* 🛠 LEFT SIDEBAR: ACCORDION CATEGORIES */}
         <aside className="w-full shrink-0 md:w-64">
           <div className="overflow-hidden rounded-xl border border-border bg-card shadow-sm">
             {/* Sidebar Header */}

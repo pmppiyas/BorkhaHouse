@@ -2,9 +2,10 @@
 
 import Header from '@/app/components/shared/Header';
 import ProductCard from '@/app/components/shared/ProductCard';
-import { products } from '@/app/assets/product.assets';
+import { IProduct } from '@/interface/product.interface';
 
-const DealOfTheDay = () => {
+const DealOfTheDay = ({ products }: { products: IProduct[] }) => {
+  if (!products.length) return;
   return (
     <div className="space-y-4 p-4 md:p-6">
       <Header title="Deal Of The Day" />
