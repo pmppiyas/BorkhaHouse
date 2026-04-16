@@ -2,71 +2,108 @@
 
 import { Check } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useState } from 'react';
 
-const colors = [
-  '#000000',
-  '#FFFFFF',
-  '#8B4513',
-  '#4B5320',
-  '#2F4F4F',
-  '#800000',
-];
+const defaultColors = ['white', 'black', 'red', 'olive', 'gray'];
 
-const ColorFilter = ({ selectedColor, setSelectedColor }: any) => {
+const ColorFilter = () => {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  const initialColor = searchParams.get('color') || null;
+  const [selectedColor, setSelectedColor] = useState<string | null>(
+    initialColor
+  );
+
+  const [customColor, setCustomColor] = useState('');
+
+  const handleSelect = (color: string | null) => {
+    const params = new URLSearchParams(searchParams.toString());
+
+    if (color) {
+      params.set('color', color);
+    } else {
+      params.delete('color');
+    }
+
+    params.set('page', '1');
+
+    router.push(`${pathname}?${params.toString()}`, {
+      scroll: false,
+    });
+    setSelectedColor(color);
+  };
+
+  const handleAddCustomColor = () => {
+    if (!customColor) return;
+    handleSelect(customColor);
+    setCustomColor('');
+  };
+
   return (
     <div className="rounded-xl border border-border/60 bg-card p-4 shadow-sm">
       <div className="mb-4 flex items-center justify-between">
-        <h3 className="flex items-center gap-2 text-sm font-bold tracking-wider text-foreground uppercase">
+        <h3 className="text-sm font-bold tracking-wider text-foreground uppercase">
           Color
-          <span className="flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-primary-foreground">
-            {selectedColor ? 1 : 0}
-          </span>
         </h3>
+
         {selectedColor && (
           <button
-            onClick={() => setSelectedColor(null)}
-            className="text-[10px] text-muted-foreground underline transition-colors hover:text-primary"
+            onClick={() => handleSelect(null)}
+            className="text-[10px] text-muted-foreground underline hover:text-primary"
           >
             Reset
           </button>
         )}
       </div>
 
+      {/* DEFAULT COLORS */}
       <div className="flex flex-wrap gap-3">
-        {colors.map((c, i) => {
+        {defaultColors.map((c) => {
           const isSelected = selectedColor === c;
-          const isWhite =
-            c.toLowerCase() === '#ffffff' || c.toLowerCase() === 'white';
+          const isWhite = c.toLowerCase() === '#ffffff';
 
           return (
             <button
-              key={i}
-              onClick={() => setSelectedColor(isSelected ? null : c)}
+              key={c}
+              onClick={() => handleSelect(isSelected ? null : c)}
               className={cn(
-                'group relative flex h-7 w-7 cursor-pointer items-center justify-center rounded-full border transition-all duration-300 active:scale-90',
+                'relative flex h-7 w-7 items-center justify-center rounded-full border transition active:scale-90',
                 isSelected
-                  ? 'scale-110 shadow-sm ring-2 ring-primary ring-offset-2'
-                  : 'border-border hover:scale-110'
+                  ? 'scale-110 ring-2 ring-primary ring-offset-2'
+                  : 'hover:scale-110'
               )}
               style={{ backgroundColor: c }}
-              title={c}
             >
-              {/* সিলেক্ট হলে চেক আইকন দেখাবে */}
               {isSelected && (
                 <Check
                   size={14}
-                  className={cn(
-                    'animate-in duration-300 zoom-in',
-                    isWhite ? 'text-black' : 'text-white'
-                  )}
+                  className={isWhite ? 'text-black' : 'text-white'}
                 />
               )}
-
-              {/* হোভার ইফেক্ট */}
-              <span className="absolute -bottom-1 left-1/2 h-0.5 w-0 -translate-x-1/2 rounded-full bg-primary transition-all group-hover:w-4" />
             </button>
           );
         })}
+      </div>
+
+      {/* CUSTOM COLOR INPUT */}
+      <div className="mt-4 flex gap-2">
+        <input
+          type="text"
+          placeholder="e.g. #ff0000 or red"
+          value={customColor}
+          onChange={(e) => setCustomColor(e.target.value)}
+          className="w-full rounded-md border bg-background px-2 py-1 text-sm"
+        />
+
+        <button
+          onClick={handleAddCustomColor}
+          className="rounded-md bg-primary px-3 text-xs font-bold text-primary-foreground"
+        >
+          Add
+        </button>
       </div>
     </div>
   );

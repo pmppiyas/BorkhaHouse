@@ -53,3 +53,11 @@ export type IProductType =
   | 'best_seller'
   | 'deal_of_the_day'
   | 'just_for_you';
+
+export interface ICategory {
+  _id?: string;
+  name: string;
+  slug: string;
+  parentId?: string;
+  children?: ICategory[];
+}
