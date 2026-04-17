@@ -14,7 +14,7 @@ export const adminRoutes: RouteSection[] = [
     title: 'Dashboard Overview',
     nav: [
       {
-        title: 'Admin Home',
+        title: 'Home',
         href: '/admin/dashboard',
         iconName: 'LayoutDashboard',
       },
@@ -29,19 +29,14 @@ export const adminRoutes: RouteSection[] = [
     title: 'Product Management',
     nav: [
       {
-        title: 'Add Category',
+        title: 'Category',
         href: '/admin/dashboard/categories',
         iconName: 'Tags',
       },
       {
-        title: 'Add Product',
-        href: '/admin/dashboard/products/add',
-        iconName: 'PlusSquare',
-      },
-      {
-        title: 'Manage Products',
+        title: 'Product',
         href: '/admin/dashboard/products',
-        iconName: 'Package',
+        iconName: 'PlusSquare',
       },
     ],
   },
