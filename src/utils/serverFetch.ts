@@ -8,7 +8,7 @@ const serverFetchHelper = async (
 ): Promise<Response> => {
   const { headers, ...restOptions } = options;
 
-  const accessToken = await getCookie('accessToken');
+  const accessToken = await getCookie('access-token');
 
   const defaultHeaders: HeadersInit = {
     ...(headers || {}),
