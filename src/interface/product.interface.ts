@@ -55,7 +55,7 @@ export type IProductType =
   | 'just_for_you';
 
 export interface ICategory {
-  _id?: string;
+  _id: string;
   name: string;
   slug: string;
   parentId?: string;
