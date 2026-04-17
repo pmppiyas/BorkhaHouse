@@ -30,7 +30,7 @@ export const adminRoutes: RouteSection[] = [
     nav: [
       {
         title: 'Add Category',
-        href: '/admin/dashboard/categories/add',
+        href: '/admin/dashboard/categories',
         iconName: 'Tags',
       },
       {
