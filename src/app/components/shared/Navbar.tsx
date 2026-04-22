@@ -1,89 +1,112 @@
 'use client';
 
-import { useState } from 'react';
-import {
-  Menu,
-  Search,
-  Heart,
-  ShoppingCart,
-  User,
-  Headset,
-  ChevronDown,
-} from 'lucide-react';
-import {
-  Accordion,
-  AccordionItem,
-  AccordionTrigger,
-  AccordionContent,
-} from '@/components/ui/accordion';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-  DropdownMenuItem,
-} from '@/components/ui/dropdown-menu';
+  ChevronDown,
+  Menu,
+  Search,
+  ShoppingCart,
+  User,
+  Heart,
+} from 'lucide-react';
+import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import {
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+  SheetClose,
+} from '@/components/ui/sheet';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/ui/accordion';
+import { ICategory } from '@/interface/product.interface';
 import Logo from '@/app/components/shared/Logo';
-import { categories, navItems } from '@/app/assets/nav.assets';
 
-export default function Navbar() {
+export default function Navbar({ categories }: { categories: ICategory[] }) {
   const [openMenu, setOpenMenu] = useState<string | null>(null);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 10);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   return (
-    <header className="w-full border-b bg-background">
-      {/* 🔝 TOP BAR */}
-      <div className="flex flex-wrap items-center justify-between gap-4 px-4 py-4 md:px-10">
-        {/* 📱 Mobile Menu */}
-        <div className="md:hidden">
+    <header
+      className={cn(
+        'sticky top-0 z-50 w-full transition-all duration-300',
+        scrolled
+          ? 'bg-background/95 shadow-md backdrop-blur-md'
+          : 'border-b bg-background'
+      )}
+    >
+      {/* ── 1. Announcement bar ── */}
+      <div className="bg-gradient-to-r from-violet-600 via-indigo-600 to-blue-600 px-4 py-2 text-center text-xs font-medium tracking-wide text-white">
+        🎉 Free shipping on orders over $49 &nbsp;·&nbsp; Use code{' '}
+        <span className="cursor-pointer font-bold underline underline-offset-2">
+          WELCOME10
+        </span>{' '}
+        for 10% off your first order
+      </div>
+
+      {/* ── 2. Main Navbar (Logo, Search, Actions) ── */}
+      <div className="container mx-auto flex h-16 items-center justify-between gap-4 px-4">
+        <div className="lg:hidden">
           <Sheet>
             <SheetTrigger asChild>
-              <Button variant="outline" size="icon">
-                <Menu />
+              <Button variant="ghost" size="icon">
+                <Menu className="h-5 w-5" />
               </Button>
             </SheetTrigger>
 
-            <SheetContent side="left" className="w-40">
-              <div className="mt-6 px-12">
-                <Accordion
-                  type="single"
-                  collapsible
-                  className="w-full space-y-2"
-                >
-                  {navItems.map((item, index) => (
+            <SheetContent side="left" className="flex w-75 flex-col p-0">
+              <div className="flex-1 overflow-y-auto px-4 py-6">
+                <p className="mb-4 text-[10px] font-bold tracking-widest text-muted-foreground uppercase">
+                  Categories
+                </p>
+                <Accordion type="single" collapsible className="w-full">
+                  {categories.map((cat) => (
                     <AccordionItem
-                      key={item.name}
-                      value={`item-${index}`}
+                      key={cat._id}
+                      value={cat._id!}
                       className="border-none"
                     >
-                      {!item.children ? (
-                        <Link
-                          href={item.href}
-                          className="block py-2 text-base font-semibold text-primary"
-                        >
-                          {item.name}
-                        </Link>
-                      ) : (
+                      {cat.children?.length ? (
                         <>
-                          {/* 🔹 Parent clickable */}
-                          <AccordionTrigger className="py-2 text-base font-semibold hover:text-primary">
-                            {item.name}
+                          <AccordionTrigger className="py-2 text-lg font-medium hover:no-underline">
+                            {cat.name}
                           </AccordionTrigger>
-
-                          <AccordionContent className="ml-4 space-y-2 pb-2">
-                            {item.children.map((sub) => (
-                              <Link
-                                key={sub.name}
-                                href={sub.href}
-                                className="block text-sm text-muted-foreground transition hover:text-primary"
-                              >
-                                {sub.name}
-                              </Link>
+                          <AccordionContent className="ml-2 border-l-2 border-muted pb-2 pl-4">
+                            {cat.children.map((sub) => (
+                              <SheetClose asChild key={sub._id}>
+                                <Link
+                                  href={`/shop?category=${cat.slug}&subcategory=${sub.slug}`}
+                                  className="block py-2 text-lg text-muted-foreground hover:text-primary"
+                                >
+                                  {sub.name}
+                                </Link>
+                              </SheetClose>
                             ))}
                           </AccordionContent>
                         </>
+                      ) : (
+                        <SheetClose asChild>
+                          <Link
+                            href={`/shop?category=${cat.slug}`}
+                            className="block py-2 text-lg font-medium"
+                          >
+                            {cat.name}
+                          </Link>
+                        </SheetClose>
                       )}
                     </AccordionItem>
                   ))}
@@ -93,94 +116,110 @@ export default function Navbar() {
           </Sheet>
         </div>
 
+        {/* Logo */}
         <Logo />
 
-        <div className="hidden max-w-2xl flex-1 overflow-hidden rounded-full border border-primary/40 md:flex">
+        {/* Desktop Search */}
+        <div className="hidden max-w-xl flex-1 lg:relative lg:flex">
+          <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
-            placeholder="Search your style..."
-            className="h-10 border-none focus-visible:ring-0"
+            placeholder="Search products..."
+            className="h-10 border-none bg-secondary/40 pl-10 ring-primary/20 focus-visible:ring-1"
           />
-
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="m-1">
-                All Categories
-              </Button>
-            </DropdownMenuTrigger>
-
-            <DropdownMenuContent className="w-56">
-              {categories.map((cat) => (
-                <div key={cat.name}>
-                  <DropdownMenuItem asChild>
-                    <Link href={cat.href} className="font-semibold">
-                      {cat.name}
-                    </Link>
-                  </DropdownMenuItem>
-
-                  {cat.children?.map((sub) => (
-                    <DropdownMenuItem key={sub.name} asChild>
-                      <Link
-                        href={sub.href}
-                        className="pl-4 text-muted-foreground"
-                      >
-                        {sub.name}
-                      </Link>
-                    </DropdownMenuItem>
-                  ))}
-                </div>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
-
-          <Button className="h-10 rounded-full px-6">
-            <Search size={18} />
-          </Button>
         </div>
 
-        <div className="flex items-center gap-4">
-          <div className="hidden items-center gap-2 lg:flex">
-            <div className="rounded-full bg-primary/10 p-2 text-primary">
-              <Headset size={18} />
-            </div>
-            <div className="text-xs">
-              <p className="text-muted-foreground">Support</p>
-              <p className="font-semibold">0123456789</p>
-            </div>
-          </div>
+        {/* Actions */}
+        <div className="flex items-center gap-1 sm:gap-3">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="hidden hover:bg-accent sm:flex"
+          >
+            <Heart className="h-5 w-5" />
+          </Button>
 
-          <Heart className="cursor-pointer hover:text-primary" />
-          <ShoppingCart className="cursor-pointer hover:text-primary" />
-          <User className="cursor-pointer hover:text-primary" />
+          <Button
+            variant="ghost"
+            size="icon"
+            className="relative hover:bg-accent"
+          >
+            <ShoppingCart className="h-5 w-5" />
+            <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-primary-foreground">
+              5
+            </span>
+          </Button>
+
+          <Button variant="ghost" size="icon" className="hover:bg-accent">
+            <User className="h-5 w-5" />
+          </Button>
+
+          <Link href="/auth" className="ml-2 hidden lg:block">
+            <Button size="sm" className="px-6 font-semibold">
+              Sign In
+            </Button>
+          </Link>
         </div>
       </div>
 
-      {/* 🔽 NAVBAR */}
-      <div className="hidden items-center border-t bg-muted/30 px-10 md:flex">
-        <nav className="flex flex-1 justify-center gap-8 text-sm font-medium">
-          {navItems.map((item) => (
+      {/*  Desktop Floating Navigation */}
+      <nav className="hidden items-center justify-center border-t bg-background py-6 lg:flex">
+        <div className="flex h-full text-lg">
+          <Link
+            href="/"
+            className={cn(
+              'flex h-full items-center border-b-2 border-transparent px-5 font-medium transition-colors',
+              'text-muted-foreground hover:border-primary hover:text-primary'
+            )}
+          >
+            Home
+          </Link>
+          {categories.map((cat) => (
             <div
-              key={item.name}
-              className="relative"
-              onMouseEnter={() => setOpenMenu(item.name)}
+              key={cat._id}
+              className="relative flex h-full items-center"
+              onMouseEnter={() => setOpenMenu(cat._id!)}
               onMouseLeave={() => setOpenMenu(null)}
             >
               <Link
-                href={item.href}
-                className="flex items-center gap-1 py-4 transition-all hover:text-primary"
+                href={`/shop?category=${cat.slug}`}
+                className={cn(
+                  'flex h-full items-center gap-1 border-b-2 border-transparent px-5 font-medium transition-colors',
+                  openMenu === cat._id
+                    ? 'border-primary text-primary'
+                    : 'text-muted-foreground hover:text-primary'
+                )}
               >
-                {item.name}
-                {item.children && <ChevronDown size={14} />}
+                {cat.name}
+                {cat.children && cat.children.length > 0 && (
+                  <ChevronDown
+                    className={cn(
+                      'h-3 w-3 transition-transform duration-200',
+                      openMenu === cat._id && 'rotate-180'
+                    )}
+                  />
+                )}
               </Link>
 
-              {/* ✨ Dropdown */}
-              {item.children && openMenu === item.name && (
-                <div className="absolute top-full left-0 z-50 w-44 rounded-xl border bg-background p-3 shadow-lg">
-                  {item.children.map((sub) => (
+              {/* Floating Dropdown */}
+              {cat.children && cat.children.length > 0 && (
+                <div
+                  className={cn(
+                    'absolute top-full left-0 z-60 w-56 rounded-md border bg-popover p-2 shadow-xl transition-all duration-200',
+                    openMenu === cat._id
+                      ? 'visible translate-y-0 opacity-100'
+                      : 'pointer-events-none invisible translate-y-2 opacity-0'
+                  )}
+                >
+                  <div className="mb-2 rounded-sm bg-muted/30 px-3 py-2">
+                    <p className="font-bold text-primary">All {cat.name}</p>
+                  </div>
+                  {cat.children.map((sub) => (
                     <Link
-                      key={sub.name}
-                      href={sub.href}
-                      className="block rounded-md px-3 py-2 text-sm transition hover:bg-muted hover:text-primary"
+                      key={sub._id}
+                      href={`/shop?category=${cat.slug}&subcategory=${sub.slug}`}
+                      className="group flex items-center gap-2 rounded-sm px-3 py-2.5 text-lg transition-all hover:bg-accent hover:text-accent-foreground"
                     >
+                      <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground transition-colors group-hover:bg-primary" />
                       {sub.name}
                     </Link>
                   ))}
@@ -188,8 +227,17 @@ export default function Navbar() {
               )}
             </div>
           ))}
-        </nav>
-      </div>
+          <Link
+            href="/contact"
+            className={cn(
+              'flex h-full items-center border-b-2 border-transparent px-5 text-lg font-medium transition-colors',
+              'text-muted-foreground hover:border-primary hover:text-primary'
+            )}
+          >
+            Contact Us
+          </Link>
+        </div>
+      </nav>
     </header>
   );
 }

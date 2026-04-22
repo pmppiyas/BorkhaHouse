@@ -25,11 +25,15 @@ const ShopContent = ({
     setOpenIndex(openIndex === index ? null : index);
   };
 
-  const createCategoryLink = (category: string, subcategory: string) => {
+  const createCategoryLink = (category: string, subcategory?: string) => {
     const params = new URLSearchParams(searchParams.toString());
 
     params.set('category', category);
-    params.set('subcategory', subcategory);
+    if (subcategory) {
+      params.set('subcategory', subcategory);
+    } else {
+      params.delete('subcategory');
+    }
     params.set('page', '1');
 
     return `/shop?${params.toString()}`;
@@ -37,11 +41,14 @@ const ShopContent = ({
 
   return (
     <div className="flex flex-col gap-6 md:flex-row">
-      <aside className="w-full shrink-0 space-y-6 md:w-64">
+      {/* Sidebar Section */}
+      <aside className="w-full shrink-0 space-y-6 md:w-72">
         <div className="overflow-hidden rounded-xl border bg-card shadow-sm">
           <div className="flex items-center gap-3 bg-primary p-4 text-primary-foreground">
-            <LayoutGrid size={20} />
-            <span className="text-sm font-semibold">Shop Categories</span>
+            <LayoutGrid size={22} />
+            <span className="text-base font-bold tracking-wider uppercase">
+              Shop Categories
+            </span>
           </div>
 
           <nav className="flex flex-col">
@@ -52,45 +59,78 @@ const ShopContent = ({
               return (
                 <div key={cat._id} className="border-b last:border-0">
                   <div
-                    onClick={() => hasChildren && toggleAccordion(i)}
                     className={cn(
-                      'flex cursor-pointer items-center justify-between p-3.5 text-sm transition hover:bg-accent',
-                      isOpen ? 'text-primary' : 'text-muted-foreground'
+                      'flex cursor-pointer items-center justify-between p-4 transition hover:bg-accent',
+                      isOpen
+                        ? 'bg-primary/5 text-primary'
+                        : 'text-muted-foreground'
                     )}
                   >
-                    <span className={cn('font-medium', isOpen && 'font-bold')}>
-                      {cat.name}
-                    </span>
-
-                    {hasChildren ? (
-                      <ChevronDown
-                        size={14}
+                    <Link
+                      href={createCategoryLink(cat.slug)}
+                      scroll={false}
+                      onClick={(e) => {
+                        if (hasChildren) {
+                          toggleAccordion(i);
+                        }
+                      }}
+                      className="flex-1"
+                    >
+                      <span
                         className={cn(
-                          'transition duration-300',
-                          isOpen && 'rotate-180'
+                          'text-lg font-semibold tracking-tight',
+                          isOpen && 'text-primary'
                         )}
-                      />
-                    ) : (
-                      <ChevronRight size={14} />
+                      >
+                        {cat.name}
+                      </span>
+                    </Link>
+
+                    {hasChildren && (
+                      <div onClick={() => toggleAccordion(i)} className="pl-4">
+                        <ChevronDown
+                          size={20}
+                          className={cn(
+                            'transition duration-300',
+                            isOpen && 'rotate-180'
+                          )}
+                        />
+                      </div>
                     )}
+                    {!hasChildren && <ChevronRight size={18} />}
                   </div>
 
                   {hasChildren && (
                     <div
                       className={cn(
-                        'overflow-hidden bg-muted/20 transition-all duration-300',
-                        isOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+                        'overflow-hidden bg-muted/10 transition-all duration-300',
+                        isOpen ? 'max-h-250 opacity-100' : 'max-h-0 opacity-0'
                       )}
                     >
-                      <div className="flex flex-col py-1">
+                      <div className="flex flex-col py-2">
                         {cat.children?.map((child) => (
                           <Link
                             key={child._id}
                             href={createCategoryLink(cat.slug, child.slug)}
-                            className="flex items-center gap-2 py-2 pr-4 pl-10 text-xs text-muted-foreground hover:text-primary"
+                            scroll={false}
+                            className="group flex items-center gap-3 py-2.5 pr-4 pl-10 text-muted-foreground transition-colors hover:text-primary"
                           >
-                            <span className="h-1.5 w-1.5 rounded-full bg-border" />
-                            {child.name}
+                            <span
+                              className={cn(
+                                'h-2 w-2 rounded-full bg-border transition-colors group-hover:bg-primary',
+                                searchParams.get('subcategory') ===
+                                  child.slug && 'bg-primary'
+                              )}
+                            />
+                            <span
+                              className={cn(
+                                'text-[16px] font-medium',
+                                searchParams.get('subcategory') ===
+                                  child.slug && 'font-bold text-primary'
+                              )}
+                            >
+                              {child.name}
+                            </span>
                           </Link>
                         ))}
                       </div>
@@ -106,11 +146,12 @@ const ShopContent = ({
         <ColorFilter />
       </aside>
 
+      {/* Product Main Section */}
       <main className="flex-1">
         {products.length > 0 ? (
-          <div className="grid grid-cols-2 gap-6 md:grid-cols-4">
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {products.map((p, i) => (
-              <ProductCard key={i} product={p} />
+              <ProductCard key={p._id || i} product={p} />
             ))}
           </div>
         ) : (

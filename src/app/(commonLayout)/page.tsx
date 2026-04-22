@@ -31,6 +31,7 @@ export default async function Page() {
     type: 'best_seller',
     limit: 12,
   });
+
   return (
     <div className="flex w-full flex-col">
       <Hero products={hero} />
