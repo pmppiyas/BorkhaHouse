@@ -1,8 +1,9 @@
-import Navbar from '@/app/components/shared/Navbar';
+import Navbar from '@/app/components/shared/nav/Navbar';
 import { getAllCategories } from '@/services/category/getAllCategories';
 
 const NavbarWrapper = async () => {
   const categories = await getAllCategories();
+
   return (
     <div>
       <Navbar categories={categories} />

@@ -14,7 +14,7 @@ const page = async ({ searchParams }: Props) => {
 
   const categories = await getAllCategories();
 
-  const products = await getAllProducts({ category, subcategory });
+  const { products } = await getAllProducts({ category, subcategory });
 
   return (
     <div className="mx-auto max-w-7xl space-y-4 p-4 md:p-6">

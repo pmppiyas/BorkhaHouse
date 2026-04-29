@@ -25,8 +25,9 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
-import { ICategory } from '@/interface/product.interface';
+import { ICart, ICategory } from '@/interface/product.interface';
 import Logo from '@/app/components/shared/Logo';
+import CartItem from '@/app/components/shared/nav/CartItem';
 
 export default function Navbar({ categories }: { categories: ICategory[] }) {
   const [openMenu, setOpenMenu] = useState<string | null>(null);
@@ -36,8 +37,30 @@ export default function Navbar({ categories }: { categories: ICategory[] }) {
     const handleScroll = () => {
       setScrolled(window.scrollY > 10);
     };
+
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const [open, setOpen] = useState(false);
+
+  const [cartCount, setCartCount] = useState(0);
+  const [cart, setCart] = useState<ICart[]>([]);
+
+  useEffect(() => {
+    const loadCart = () => {
+      const storedCart = JSON.parse(localStorage.getItem('cart') || '[]');
+      setCart(storedCart);
+      setCartCount(storedCart.length);
+    };
+
+    loadCart();
+
+    window.addEventListener('cartUpdated', loadCart);
+
+    return () => {
+      window.removeEventListener('cartUpdated', loadCart);
+    };
   }, []);
 
   return (
@@ -50,7 +73,7 @@ export default function Navbar({ categories }: { categories: ICategory[] }) {
       )}
     >
       {/* ── 1. Announcement bar ── */}
-      <div className="bg-gradient-to-r from-violet-600 via-indigo-600 to-blue-600 px-4 py-2 text-center text-xs font-medium tracking-wide text-white">
+      <div className="bg-linear-to-r from-violet-600 via-indigo-600 to-blue-600 px-4 py-2 text-center text-xs font-medium tracking-wide text-white">
         🎉 Free shipping on orders over $49 &nbsp;·&nbsp; Use code{' '}
         <span className="cursor-pointer font-bold underline underline-offset-2">
           WELCOME10
@@ -64,7 +87,7 @@ export default function Navbar({ categories }: { categories: ICategory[] }) {
           <Sheet>
             <SheetTrigger asChild>
               <Button variant="ghost" size="icon">
-                <Menu className="h-5 w-5" />
+                <Menu className="h-7 w-7 font-semibold" />
               </Button>
             </SheetTrigger>
 
@@ -127,7 +150,6 @@ export default function Navbar({ categories }: { categories: ICategory[] }) {
             className="h-10 border-none bg-secondary/40 pl-10 ring-primary/20 focus-visible:ring-1"
           />
         </div>
-
         {/* Actions */}
         <div className="flex items-center gap-1 sm:gap-3">
           <Button
@@ -135,27 +157,30 @@ export default function Navbar({ categories }: { categories: ICategory[] }) {
             size="icon"
             className="hidden hover:bg-accent sm:flex"
           >
-            <Heart className="h-5 w-5" />
+            <Heart className="h-7 w-7 font-semibold" />
           </Button>
+          <Sheet open={open} onOpenChange={setOpen}>
+            <SheetTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="relative hover:bg-accent"
+              >
+                <ShoppingCart className="h-7 w-7 font-semibold" />
+                <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-primary-foreground">
+                  {cartCount}
+                </span>
+              </Button>
+            </SheetTrigger>
 
-          <Button
-            variant="ghost"
-            size="icon"
-            className="relative hover:bg-accent"
-          >
-            <ShoppingCart className="h-5 w-5" />
-            <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-primary-foreground">
-              5
-            </span>
-          </Button>
+            <SheetContent side="right" className="flex w-95 flex-col p-0">
+              <CartItem carts={cart} setOpen={setOpen} />
+            </SheetContent>
+          </Sheet>
 
-          <Button variant="ghost" size="icon" className="hover:bg-accent">
-            <User className="h-5 w-5" />
-          </Button>
-
-          <Link href="/auth" className="ml-2 hidden lg:block">
-            <Button size="sm" className="px-6 font-semibold">
-              Sign In
+          <Link href="/auth" className="ml-2">
+            <Button variant="ghost" size="icon" className="hover:bg-accent">
+              <User className="h-7 w-7 font-semibold" />
             </Button>
           </Link>
         </div>

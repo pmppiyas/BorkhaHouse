@@ -61,3 +61,11 @@ export interface ICategory {
   parentId?: string;
   children?: ICategory[];
 }
+
+export interface ICart {
+  slug: string;
+  name: string;
+  price: number;
+  image: string;
+  quantity: number;
+}
