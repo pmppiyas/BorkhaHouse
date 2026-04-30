@@ -11,10 +11,23 @@ import {
 } from '@/components/ui/select';
 import { CalendarDays, Phone, User, MapPin } from 'lucide-react';
 import { getStatusVariant } from '@/utils/getStatusVarient';
+import { orderStatusUpdate } from '@/services/order/updateStatus';
+import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
 
 const OrdersContent = ({ orders }: { orders: IOrder[] }) => {
+  const router = useRouter();
+
   const handleStatusChange = async (orderId: string, status: OrderStatus) => {
-    console.log('Update order:', orderId, status);
+    const update = await orderStatusUpdate(orderId, status);
+
+    if (update.success) {
+      s;
+      router.refresh();
+      toast.success(update.message);
+    } else {
+      toast.error(update.message || 'Failed to update order status');
+    }
   };
 
   return (
