@@ -22,7 +22,6 @@ const OrdersContent = ({ orders }: { orders: IOrder[] }) => {
     const update = await orderStatusUpdate(orderId, status);
 
     if (update.success) {
-      s;
       router.refresh();
       toast.success(update.message);
     } else {

@@ -9,21 +9,22 @@ interface PageProps {
   }>;
 }
 
-const page = ({ searchParams }: PageProps) => {
+const Page = async ({ searchParams }: PageProps) => {
+  const resolvedParams = await searchParams;
+
   return (
-    <div>
-      <Suspense
-        fallback={
-          <div className="space-y-4 p-4">
-            <ReusableHeaderSkeleton />
-            <OrdersSkeleton />
-          </div>
-        }
-      >
-        <OrderPageWrapper searchParams={searchParams} />
-      </Suspense>
-    </div>
+    <Suspense
+      key={resolvedParams.status || 'all'}
+      fallback={
+        <div className="space-y-4 p-4">
+          <ReusableHeaderSkeleton />
+          <OrdersSkeleton />
+        </div>
+      }
+    >
+      <OrderPageWrapper status={resolvedParams.status} />
+    </Suspense>
   );
 };
 
-export default page;
+export default Page;

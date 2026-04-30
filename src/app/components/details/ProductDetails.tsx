@@ -7,12 +7,15 @@ import { ShoppingCart, CreditCard, Minus, Plus } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
 
 const ProductDetails = ({ product }: { product: IProduct }) => {
   const { name, description, price, discount, stock, brand, slug, images } =
     product;
 
+  const router = useRouter();
   const [quantity, setQuantity] = useState(1);
+  const [selectedSize, setSelectedSize] = useState<string>('');
 
   const finalPrice = discountPrice(price, discount);
 
@@ -25,17 +28,24 @@ const ProductDetails = ({ product }: { product: IProduct }) => {
   };
 
   const handleAddToCart = () => {
-    const existingCart = JSON.parse(localStorage.getItem('cart') || '[]');
+    if (product.sizes?.length && !selectedSize) {
+      toast.error('Please select a size');
+      return;
+    }
+
+    const existingCart: ICart[] = JSON.parse(
+      localStorage.getItem('cart') || '[]'
+    );
 
     const existingProduct = existingCart.find(
-      (item: { slug: string }) => item.slug === slug
+      (item) => item.slug === slug && item.size === selectedSize
     );
 
     let updatedCart;
 
     if (existingProduct) {
-      updatedCart = existingCart.map((item: ICart) =>
-        item.slug === slug
+      updatedCart = existingCart.map((item) =>
+        item.slug === slug && item.size === selectedSize
           ? {
               ...item,
               quantity: Math.min(item.quantity + quantity, stock),
@@ -52,6 +62,7 @@ const ProductDetails = ({ product }: { product: IProduct }) => {
           image: images?.[0],
           quantity,
           stock,
+          size: selectedSize,
         },
       ];
     }
@@ -63,8 +74,20 @@ const ProductDetails = ({ product }: { product: IProduct }) => {
     toast.success('Product added to cart');
   };
 
+  const cartParams = [
+    {
+      slug,
+      quantity,
+      size: selectedSize,
+    },
+  ];
+
+  const encodedCart = encodeURIComponent(JSON.stringify(cartParams));
+
   const handleBuyNow = () => {
-    console.log('Redirect to checkout');
+    setTimeout(() => {
+      router.push(`/order?items=${encodedCart}`);
+    }, 250);
   };
 
   return (
@@ -101,12 +124,18 @@ const ProductDetails = ({ product }: { product: IProduct }) => {
         <span className="text-sm font-medium">Size:</span>
         <div className="mt-2 flex flex-wrap gap-2">
           {product.sizes?.map((size) => (
-            <div
+            <button
               key={size}
-              className="rounded-md border border-input px-5 py-2 text-lg"
+              type="button"
+              onClick={() => setSelectedSize(size)}
+              className={`rounded-md border px-5 py-2 text-lg transition ${
+                selectedSize === size
+                  ? 'border-primary bg-primary text-primary-foreground'
+                  : 'border-input'
+              }`}
             >
               {size}
-            </div>
+            </button>
           ))}
         </div>
       </div>

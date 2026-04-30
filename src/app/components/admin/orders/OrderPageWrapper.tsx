@@ -1,19 +1,14 @@
+import FilterDropdown from '@/app/components/admin/orders/FilterDropdown';
 import OrdersContent from '@/app/components/admin/orders/OrdersContent';
 import ReusableHeader from '@/app/components/shared/ReuseableHeader';
 import { getOrders } from '@/services/order/getOrders';
 import { Package } from 'lucide-react';
 
-interface props {
-  searchParams: Promise<{
-    status?: string;
-  }>;
+interface Props {
+  status?: string;
 }
 
-const OrderPageWrapper = async ({ searchParams }: props) => {
-  const params = await searchParams;
-
-  const status = params?.status || undefined;
-
+const OrderPageWrapper = async ({ status }: Props) => {
   const orders = await getOrders({ status });
 
   return (
@@ -21,10 +16,11 @@ const OrderPageWrapper = async ({ searchParams }: props) => {
       <ReusableHeader
         icon={<Package className="h-5 w-5" />}
         title="Order Management"
-        description="Manage customer orders and update delivery status"
-        currentStatus={status || 'all'}
+        description="Manage customer orders easily"
         totalCount={orders.length}
+        filterSlot={<FilterDropdown />}
       />
+
       <OrdersContent orders={orders} />
     </div>
   );

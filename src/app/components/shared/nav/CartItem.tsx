@@ -30,10 +30,10 @@ const CartItem = ({
   const cartParams = carts.map((item) => ({
     slug: item.slug,
     quantity: item.quantity,
+    size: item.size,
   }));
 
   const encodedCart = encodeURIComponent(JSON.stringify(cartParams));
-
 
   const handleCheckout = () => {
     setOpen(false);
@@ -46,9 +46,8 @@ const CartItem = ({
   return (
     <div className="flex h-full max-h-screen w-95 flex-col">
       {/* HEADER */}
-      <div className="border-b px-6 py-4">
+      <div className="border-b px-6 py-6">
         <h2 className="text-lg font-semibold">Shopping Cart</h2>
-        <p className="text-sm text-muted-foreground">Your selected products</p>
       </div>
 
       {/* CART LIST */}

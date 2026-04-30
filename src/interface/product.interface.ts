@@ -68,4 +68,5 @@ export interface ICart {
   price: number;
   image: string;
   quantity: number;
+  size?: string;
 }

@@ -44,6 +44,7 @@ const BillingForm = ({
     return {
       ...product,
       quantity,
+      size: cartItem?.size || '',
       totalPrice: product.price * quantity,
     };
   });
@@ -63,6 +64,7 @@ const BillingForm = ({
       items: mergedItems.map((item) => ({
         slug: item.slug,
         quantity: item.quantity,
+        size: item.size || '',
       })),
       subtotal,
       shippingFee,
