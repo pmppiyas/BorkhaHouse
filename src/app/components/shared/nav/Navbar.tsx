@@ -43,7 +43,6 @@ export default function Navbar({ categories }: { categories: ICategory[] }) {
   }, []);
 
   const [open, setOpen] = useState(false);
-
   const [cartCount, setCartCount] = useState(0);
   const [cart, setCart] = useState<ICart[]>([]);
 
@@ -74,7 +73,7 @@ export default function Navbar({ categories }: { categories: ICategory[] }) {
     >
       {/* ── 1. Announcement bar ── */}
       <div className="bg-linear-to-r from-violet-600 via-indigo-600 to-blue-600 px-4 py-2 text-center text-xs font-medium tracking-wide text-white">
-        🎉 Free shipping on orders over $49 &nbsp;·&nbsp; Use code{' '}
+        🎉 Free shipping on orders over 3000 tk &nbsp;·&nbsp; Use code{' '}
         <span className="cursor-pointer font-bold underline underline-offset-2">
           WELCOME10
         </span>{' '}

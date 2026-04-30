@@ -31,6 +31,8 @@ const SignIn = () => {
       if (result.success) {
         toast.success(result.message);
         router.push(redirect || '/');
+      } else {
+        toast.error(result.message);
       }
     } catch (err) {
       toast.error('Login failed');

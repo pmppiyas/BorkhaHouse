@@ -7,8 +7,6 @@ export const signUp = async (payload: IUser) => {
 
     const result = await res.json();
 
-    console.log(result);
-
     return result;
   } catch (err) {
     return err instanceof Error ? err.message : 'Internal Server Error';

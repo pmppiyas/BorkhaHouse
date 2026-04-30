@@ -17,6 +17,7 @@ export type OrderStatus =
   | 'CANCELLED';
 
 export interface IOrder {
+  _id: string;
   customer: ICustomerInfo;
   paymentMethod: string;
   items: IOrderItem[];
