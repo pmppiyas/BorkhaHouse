@@ -15,19 +15,21 @@ function Footer() {
       <div className="flex flex-col items-center justify-between gap-4 bg-primary px-4 py-4 text-primary-foreground md:flex-row md:px-10">
         <div className="flex items-center gap-2">
           <Mail size={18} />
-          <p className="font-medium">Sign Up For Newsletter</p>
+          <p className="font-medium">সহজ কেনাকাটা এখন আপনার ঘরে</p>
         </div>
 
         <p className="hidden text-sm md:block">
-          Shopping First For Coupon $25 Receive And...
+          অগ্রিম টাকা ছাড়াই ক্যাশ অন ডেলিভারিতে অর্ডার করুন
         </p>
 
         <div className="flex w-full max-w-md items-center gap-2">
           <Input
-            placeholder="Your email address"
+            placeholder="আপনার ফোন নাম্বার দিন"
             className="bg-background text-foreground"
           />
-          <Button variant="secondary">Subscribe</Button>
+          <Link href="/shop">
+            <Button variant="secondary">অর্ডার করুন</Button>
+          </Link>
         </div>
       </div>
 

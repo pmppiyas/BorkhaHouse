@@ -24,3 +24,5 @@ export interface IUser {
   status: IStatus;
   password: string;
 }
+
+export type IRole = 'ADMIN' | 'BUYER';
