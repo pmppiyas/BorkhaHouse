@@ -1,6 +1,4 @@
 'use client';
-
-import { products } from '@/app/assets/product.assets';
 import EmptyState from '@/app/components/shared/EmptyState';
 import ProductCard from '@/app/components/shared/ProductCard';
 import ColorFilter from '@/app/components/shop/ColorFilter';

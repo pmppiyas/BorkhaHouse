@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { env } from '@/config/env.config';
-import getCookie from '@/utils/getCookies';
+import { getCookie } from '@/utils/cookies';
 
 const serverFetchHelper = async (
   endpoint: string,
@@ -8,7 +8,7 @@ const serverFetchHelper = async (
 ): Promise<Response> => {
   const { headers, ...restOptions } = options;
 
-  const accessToken = await getCookie('access-token');
+  const accessToken = await getCookie('accessToken');
 
   const defaultHeaders: HeadersInit = {
     ...(headers || {}),

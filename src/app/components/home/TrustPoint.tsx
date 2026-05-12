@@ -19,7 +19,6 @@ const TrustPoint = () => {
       title: 'Cash On Delivery',
       description: 'Pay only when you receive your product at your doorstep.',
     },
-    ,
     {
       icon: <Headphones className="h-10 w-10 text-primary" strokeWidth={1.5} />,
       title: 'Power Support',

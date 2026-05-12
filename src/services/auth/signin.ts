@@ -8,6 +8,6 @@ export const signIn = async (payload: ISignIn) => {
   const res = await serverFetch.post('auth/signin', payload);
 
   const result = await res.json();
-
+  console.log('SignIn Result=>', result);
   return result;
 };

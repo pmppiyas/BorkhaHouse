@@ -4,7 +4,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Mail } from 'lucide-react';
 import Logo from '@/app/components/shared/Logo';
-import { socialIcon, socialLinks } from '@/app/assets/social.assets';
+import { socialLinks } from '@/app/assets/social.assets';
 import Image from 'next/image';
 import Link from 'next/link';
 

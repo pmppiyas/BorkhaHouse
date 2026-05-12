@@ -3,15 +3,15 @@ import CategorySkeleton from '@/app/components/dashbord/admin/category/CategoryS
 import CategoryWrapper from '@/app/components/dashbord/admin/category/CategoryWrapper';
 import { Suspense } from 'react';
 
-const page = async () => {
+const Page = () => {
   return (
-    <div className="space-y-6 p-4">
-      <CategoryHeader />
-      <Suspense fallback={<CategorySkeleton />}>
+    <Suspense fallback={<CategorySkeleton />}>
+      <div className="space-y-6 p-4">
+        <CategoryHeader />
         <CategoryWrapper />
-      </Suspense>
-    </div>
+      </div>
+    </Suspense>
   );
 };
 
-export default page;
+export default Page;

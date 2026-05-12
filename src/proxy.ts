@@ -6,8 +6,7 @@ import { IRole } from '@/interface/user.interface';
 
 export async function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl;
-  const accessToken = req.cookies.get('access-token')?.value;
-
+  const accessToken = req.cookies.get('accessToken')?.value;
   if (!accessToken) {
     const routeOwner = getRouteOwner(pathname);
 
@@ -42,7 +41,7 @@ export async function proxy(req: NextRequest) {
     return NextResponse.next();
   } catch (error) {
     const res = NextResponse.redirect(new URL('/auth', req.url));
-    res.cookies.delete('access-token');
+    res.cookies.delete('accessToken');
     return res;
   }
 }

@@ -60,7 +60,7 @@ const FilterDropdown = () => {
             }`}
           >
             {item.label}
-            {/* যদি এটি একটিভ হয় তবে পাশে একটি টিক মার্ক দেখাবে */}
+
             {currentStatus === item.value && <Check className="h-4 w-4" />}
           </DropdownMenuItem>
         ))}

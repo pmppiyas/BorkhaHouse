@@ -53,7 +53,7 @@ const CategoryCreateModal = ({ open, onOpenChange, onSubmit }: Props) => {
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="rounded-2xl sm:max-w-lg">
         <DialogHeader>
-          <DialogTitle className="text-xl font-bold">
+          <DialogTitle className="sr-only text-xl font-bold">
             Add New Category
           </DialogTitle>
         </DialogHeader>

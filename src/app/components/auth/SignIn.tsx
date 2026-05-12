@@ -9,6 +9,7 @@ import { LoginSchema } from '@/validation/auth.validation';
 import { signIn } from '@/services/auth/signin';
 import { toast } from 'sonner';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { setCookie } from '@/utils/cookies';
 
 type FormData = z.infer<typeof LoginSchema>;
 
@@ -30,6 +31,8 @@ const SignIn = () => {
       const result = await signIn(data);
       if (result.success) {
         toast.success(result.message);
+        const { accessToken, refreshToken } = result?.data;
+        setCookie({ accessToken, refreshToken });
         router.push(redirect || '/');
       } else {
         toast.error(result.message);

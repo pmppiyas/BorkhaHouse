@@ -3,11 +3,9 @@
 import { useState } from 'react';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
-
 import CategoryUpdateModal, {
   ICategoryUpdate,
 } from '@/app/components/dashbord/admin/category/CategoryUpdateModal';
-
 import { CategoryItem } from '@/app/components/dashbord/admin/category/CategoryItem';
 import { updateCategory } from '@/services/category/updateCategory';
 import { ICategory } from '@/interface/product.interface';
@@ -17,7 +15,6 @@ import DeleteConfirmationDialog from '@/app/components/shared/DeleteConformation
 const CategoryAccordion = ({ categories }: { categories: ICategory[] }) => {
   const [editOpen, setEditOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
-
   const [selectedCategory, setSelectedCategory] = useState<ICategory | null>(
     null
   );
