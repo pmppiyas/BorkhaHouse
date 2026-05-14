@@ -28,10 +28,15 @@ import {
 import { ICart, ICategory } from '@/interface/product.interface';
 import Logo from '@/app/components/shared/Logo';
 import CartItem from '@/app/components/shared/nav/CartItem';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 export default function Navbar({ categories }: { categories: ICategory[] }) {
   const [openMenu, setOpenMenu] = useState<string | null>(null);
   const [scrolled, setScrolled] = useState(false);
+
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const [search, setSearch] = useState(searchParams.get('search') || '');
 
   useEffect(() => {
     const handleScroll = () => {
@@ -61,6 +66,20 @@ export default function Navbar({ categories }: { categories: ICategory[] }) {
       window.removeEventListener('cartUpdated', loadCart);
     };
   }, []);
+
+  const handleSearch = (value: string) => {
+    setSearch(value);
+
+    const params = new URLSearchParams(searchParams.toString());
+
+    if (value.trim()) {
+      params.set('search', value);
+    } else {
+      params.delete('search');
+    }
+
+    router.push(`/shop?${params.toString()}`);
+  };
 
   return (
     <header
@@ -145,6 +164,8 @@ export default function Navbar({ categories }: { categories: ICategory[] }) {
         <div className="hidden max-w-xl flex-1 lg:relative lg:flex">
           <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
+            value={search}
+            onChange={(e) => handleSearch(e.target.value)}
             placeholder="Search products..."
             className="h-10 border-none bg-secondary/40 pl-10 ring-primary/20 focus-visible:ring-1"
           />
