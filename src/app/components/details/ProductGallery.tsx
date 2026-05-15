@@ -2,7 +2,6 @@
 
 import Image from 'next/image';
 import { useState } from 'react';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const ProductGallery = ({ images = [] }: { images: string[] }) => {
@@ -14,14 +13,6 @@ const ProductGallery = ({ images = [] }: { images: string[] }) => {
     );
   }
 
-  const nextImage = () => {
-    setSelectedImage((prev) => (prev + 1) % images.length);
-  };
-
-  const prevImage = () => {
-    setSelectedImage((prev) => (prev - 1 + images.length) % images.length);
-  };
-
   return (
     <div className="flex flex-col gap-4 md:flex-row">
       {/* Main Image */}
@@ -31,30 +22,10 @@ const ProductGallery = ({ images = [] }: { images: string[] }) => {
             src={images[selectedImage]}
             alt={`Product ${selectedImage + 1}`}
             width={400}
-            height={600}
+            height={300}
             priority
-            className="h-auto transition-transform duration-500 group-hover:scale-105"
+            className="h-[400px] w-[400px] object-fill transition-transform duration-500 group-hover:scale-105"
           />
-
-          {images.length > 1 && (
-            <>
-              <button
-                type="button"
-                onClick={prevImage}
-                className="absolute top-1/2 left-4 -translate-y-1/2 rounded-full bg-background/90 p-2 shadow-md"
-              >
-                <ChevronLeft className="h-5 w-5" />
-              </button>
-
-              <button
-                type="button"
-                onClick={nextImage}
-                className="absolute top-1/2 right-4 -translate-y-1/2 rounded-full bg-background/90 p-2 shadow-md"
-              >
-                <ChevronRight className="h-5 w-5" />
-              </button>
-            </>
-          )}
         </div>
 
         {/* Mobile Horizontal Thumbnails */}

@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import { useRouter } from 'next/navigation'; // নেভিগেশন এর জন্য
-import { ShoppingCart } from 'lucide-react'; // আইকন এর জন্য
+import { ShoppingCart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { IProduct } from '@/interface/product.interface';
@@ -25,14 +25,14 @@ export default function ProductCard({ product }: { product: IProduct }) {
       onClick={handleNavigate}
       className={cn(
         'group flex h-full w-full cursor-pointer flex-col overflow-hidden rounded-2xl border bg-card p-3 transition-all duration-300 hover:border-primary/50 hover:shadow-md',
-        product.isBig ? 'min-h-[400px]' : 'min-h-[320px]'
+        product?.isBig ? 'min-h-[400px]' : 'min-h-[320px]'
       )}
     >
       {/* IMAGE CONTAINER */}
       <div
         className={cn(
           'relative w-full overflow-hidden rounded-xl bg-muted',
-          product.isBig ? 'flex-1' : 'h-52 md:h-60'
+          product?.isBig ? 'flex-1' : 'h-52 md:h-60'
         )}
       >
         {thumbnail ? (
