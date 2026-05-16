@@ -30,17 +30,18 @@ const Page = async ({ params }: Props) => {
   }
 
   return (
-    <div className="container mx-auto px-4 py-10 lg:px-6">
-      <div className="grid gap-12 lg:grid-cols-2 lg:gap-20">
-        {/* Gallery */}
-        <div className="w-full">
-          <ProductGallery images={product.images || []} />
-        </div>
+    <div className="container mx-auto grid grid-cols-1 gap-6 px-4 py-10 md:gap-10 lg:grid-cols-12 lg:gap-0 lg:px-6">
+      {/* Left - Gallery */}
+      <div className="w-full lg:col-span-5">
+        <ProductGallery images={product.images || []} />
+      </div>
 
-        {/* Details */}
-        <div className="w-full">
-          <ProductDetails product={product} />
-        </div>
+      {/* Middle Gap */}
+      <div className="hidden lg:col-span-1 lg:block" />
+
+      {/* Right - Details */}
+      <div className="w-full lg:col-span-6">
+        <ProductDetails product={product} />
       </div>
     </div>
   );
