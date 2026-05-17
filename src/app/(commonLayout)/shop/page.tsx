@@ -7,14 +7,15 @@ interface Props {
   searchParams: Promise<{
     category?: string;
     subcategory?: string;
+    search?: string;
   }>;
 }
 const page = async ({ searchParams }: Props) => {
-  const { category, subcategory } = await searchParams;
+  const { category, subcategory, search } = await searchParams;
 
   const categories = await getAllCategories();
 
-  const { products } = await getAllProducts({ category, subcategory });
+  const { products } = await getAllProducts({ category, subcategory, search });
 
   return (
     <div className="mx-auto max-w-7xl space-y-4 p-4 md:p-6">
